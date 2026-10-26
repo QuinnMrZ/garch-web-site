@@ -23,3 +23,8 @@
 ## 相册直达链接
 
 `projects.html?album=<目录名>`，例如 `projects.html?album=hotels` 会打开"星级酒店"相册大图。
+
+## 在线地址
+
+- 正式域名：https://gro-architect.com （Cloudflare DNS → GitHub Pages）
+- GitHub Pages：https://quinnmrz.github.io/garch-web-site/
