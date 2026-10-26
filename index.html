@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GARCH | Grown Architects + Partners</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #111;
+            background: #fff;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            width: 100%;
+            display: block;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 18px 40px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 999;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .logo {
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-mark {
+            width: 28px;
+            height: 28px;
+            background: #c8102e;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links a {
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.6;
+        }
+
+        /* 右侧图标按钮 */
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-icon-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            border: none;
+            background: #f5f5f5;
+            color: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .nav-icon-btn:hover {
+            background: #111;
+            color: #fff;
+        }
+
+        /* 英雄区 */
+        .hero {
+            margin-top: 65px;
+            width: 100%;
+            height: 88vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-badge {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            background: rgba(0,0,0,0.65);
+            color: white;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .hero-badge a {
+            text-decoration: underline;
+            margin-left: 4px;
+        }
+
+        /* 通用区块样式 */
+        .section {
+            padding: 60px 40px;
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-outline {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 8px 18px;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .btn-outline:hover {
+            background: #111;
+            color: white;
+            border-color: #111;
+        }
+
+        /* 作品网格 */
+        .works-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            grid-auto-flow: dense;
+        }
+
+        .work-item {
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            display: block;
+        }
+
+        .work-item.tall {
+            grid-row: span 2;
+        }
+
+        .work-item.wide {
+            grid-column: span 2;
+        }
+
+        .work-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .work-item:hover img {
+            transform: scale(1.04);
+        }
+
+        .work-caption {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            color: white;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .work-item:hover .work-caption {
+            opacity: 1;
+        }
+
+        /* 创始人理念区 */
+        .founder-section {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 80px;
+            padding: 80px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .founder-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .founder-title {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .philosophy-text {
+            font-size: 18px;
+            line-height: 1.7;
+            color: #333;
+        }
+
+        /* 业务板块 */
+        .spans-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .span-card {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .span-card a {
+            display: block;
+        }
+
+        .span-card img {
+            height: 320px;
+            object-fit: cover;
+            margin-bottom: 16px;
+        }
+
+        .span-card h4 {
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* 团队介绍区 */
+        .team-intro {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            padding: 80px 40px;
+            max-width: 1440px;
+            margin: 0 auto;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .team-text h2 {
+            font-size: 32px;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 20px;
+        }
+
+        .team-text p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 24px;
+            max-width: 400px;
+        }
+
+        .team-photo {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* 页脚 */
+        footer {
+            border-top: 1px solid #f0f0f0;
+            padding: 60px 40px;
+        }
+
+        .footer-inner {
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 80px;
+            margin-bottom: 60px;
+        }
+
+        .footer-logo {
+            font-size: 36px;
+            font-weight: 600;
+        }
+
+        .footer-nav-group {
+            margin-bottom: 40px;
+        }
+
+        .footer-nav-group h5 {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .footer-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .footer-tags a {
+            font-size: 12px;
+            padding: 8px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+        }
+
+        .footer-tags a:hover {
+            background: #111;
+            color: white;
+            border-color: #111;
+        }
+
+        .signup-box h3 {
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        .signup-form {
+            display: flex;
+            gap: 8px;
+            max-width: 400px;
+            margin-bottom: 12px;
+        }
+
+        .signup-form input {
+            flex: 1;
+            padding: 10px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .signup-form button {
+            padding: 10px 24px;
+            border: 1px solid #e0e0e0;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .signup-form button:hover {
+            background: #111;
+            color: white;
+            border-color: #111;
+        }
+
+        .signup-note {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-top: 30px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .footer-links a {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .social-lang {
+            text-align: right;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+            justify-content: flex-end;
+            margin-bottom: 16px;
+        }
+
+        .social-links a {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .lang-switch {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .lang-switch a {
+            margin-left: 10px;
+        }
+
+        .lang-switch a.active {
+            color: #111;
+            font-weight: 500;
+        }
+
+        /* 响应式 */
+        @media (max-width: 992px) {
+            .works-grid, .spans-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .founder-section, .team-intro, .footer-top {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .nav-links {
+                gap: 20px;
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                padding: 16px 20px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .works-grid, .spans-grid {
+                grid-template-columns: 1fr;
+            }
+            .section, .founder-section, .team-intro, footer {
+                padding: 40px 20px;
+            }
+            .hero {
+                height: 60vh;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <div class="logo-mark">GA</div>
+            Grown Architects + Partners
+        </a>
+        <ul class="nav-links">
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="generative-design.html">Generative Design</a></li>
+            <li><a href="office.html">Office</a></li>
+        </ul>
+        <div class="nav-icons">
+            <!-- 搜索按钮 -->
+            <button class="nav-icon-btn" id="searchBtn" title="Search">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </button>
+            <!-- 联系按钮 -->
+            <button class="nav-icon-btn" id="contactBtn" title="Contact">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+            </button>
+            <!-- 语言切换按钮 -->
+            <button class="nav-icon-btn" id="langBtn" title="Language">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 英雄大图 -->
+    <section class="hero">
+        <img src="people/11.png" alt="Qing Zhang Awards">
+        <div class="hero-badge">
+            Qing Zhang won first place... <a href="#">VIEW</a>
+            <br><small>UPDATE / AWARDS</small>
+        </div>
+    </section>
+
+    <!-- 精选作品 -->
+    <section class="section">
+        <div class="section-header">
+            <h2 class="section-title">Featured Works</h2>
+            <a href="projects.html" class="btn-outline">All Work →</a>
+        </div>
+        <div class="works-grid">
+            <a class="work-item tall" href="projects.html?album=hotels">
+                <img src="images/hotels/%E5%9B%BE%E7%89%87%202.webp" alt="Hotels">
+                <div class="work-caption">星级酒店 · Hotels</div>
+            </a>
+            <a class="work-item" href="projects.html?album=hotels">
+                <img src="images/hotels/%E5%9B%BE%E7%89%87%203.webp" alt="Hotels">
+                <div class="work-caption">星级酒店 · Hotels</div>
+            </a>
+            <a class="work-item" href="projects.html?album=commercial">
+                <img src="images/commercial/%E5%9B%BE%E7%89%87%2062.webp" alt="Commercial">
+                <div class="work-caption">高端商业 · Commercial</div>
+            </a>
+            <a class="work-item" href="projects.html?album=urbanism">
+                <img src="images/urbanism/%E5%9B%BE%E7%89%87%20180.webp" alt="Urbanism">
+                <div class="work-caption">城市设计 · Urbanism</div>
+            </a>
+            <a class="work-item wide" href="projects.html?album=biddings">
+                <img src="images/biddings/%E5%9B%BE%E7%89%87%20125.webp" alt="Biddings">
+                <div class="work-caption">投标方案 · Biddings</div>
+            </a>
+            <a class="work-item" href="projects.html?album=residential">
+                <img src="images/residential/%E5%9B%BE%E7%89%87%20143.webp" alt="Residential">
+                <div class="work-caption">精品住宅 · Residential</div>
+            </a>
+        </div>
+    </section>
+
+    <!-- 创始人理念 -->
+    <section class="founder-section">
+        <div class="founder-info">
+            <div class="founder-name">ZHANG QING</div>
+            <div class="founder-title">Founder & Principle Partner</div>
+        </div>
+        <div class="philosophy-text">
+            We trace humanity's social evolution alongside cities and architecture, rebalancing the relationship between people and nature, while harnessing cutting-edge AI and proven AIGC practices. Evolution never ceases.
+        </div>
+    </section>
+
+    <!-- 业务覆盖 -->
+    <section class="section">
+        <h2 class="section-title" style="margin-bottom: 30px;">OUR WORK SPANS</h2>
+        <div class="spans-grid">
+            <div class="span-card">
+                <a href="projects.html?album=hotels">
+                    <img src="images/hotels/%E5%9B%BE%E7%89%87%2030.webp" alt="Architecture">
+                    <h4>Architecture</h4>
+                </a>
+            </div>
+            <div class="span-card">
+                <a href="generative-design.html">
+                    <img src="AIGC/%E9%87%91%E9%8A%AE%E6%AE%BF.png" alt="Art & Design">
+                    <h4>Art & Design</h4>
+                </a>
+            </div>
+            <div class="span-card">
+                <a href="generative-design.html">
+                    <img src="AIGC/%E9%93%81%E6%89%87%E5%85%AC%E4%B8%BBS.png" alt="Generative AI">
+                    <h4>Generative AI / AIGC</h4>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 团队简介 -->
+    <section class="team-intro">
+        <div class="team-text">
+            <h2>Aligned with Nature,<br>Advanced by Intelligence</h2>
+            <p>GARCH is a multidisciplinary architecture and urban design practice, spanning cities, buildings, products, art and fashion, advancing creation through AI and Generative Design.</p>
+            <a href="office.html" class="btn-outline">About Us →</a>
+        </div>
+        <div class="team-photo">
+            <img src="people/%E5%9B%BE%E7%89%87%201.webp" alt="GARCH Team">
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-logo">GARCH</div>
+                <div class="footer-nav">
+                    <div class="footer-nav-group">
+                        <h5>Works</h5>
+                        <div class="footer-tags">
+                            <a href="index.html">Home</a>
+                            <a href="projects.html">Projects</a>
+                        </div>
+                    </div>
+                    <div class="footer-nav-group">
+                        <h5>Office</h5>
+                        <div class="footer-tags">
+                            <a href="office.html">About Us</a>
+                            <a href="#">News</a>
+                            <a href="#">Our Team</a>
+                            <a href="#">Careers</a>
+                            <a href="#">Contact Us</a>
+                        </div>
+                    </div>
+                    <div class="signup-box">
+                        <h3>SIGN UP GARCH</h3>
+                        <form class="signup-form">
+                            <input type="email" placeholder="email">
+                            <button type="submit">Sign Up</button>
+                        </form>
+                        <p class="signup-note">By signing up, you consent to receive marketing emails from GARCH and agree to our Privacy Policy.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">© GARCH 2025</a>
+                </div>
+                <div class="social-lang">
+                    <div class="social-links">
+                        <a href="#">Instagram</a>
+                        <a href="#">Facebook</a>
+                        <a href="#">Linkedin</a>
+                        <a href="#">X</a>
+                    </div>
+                    <div class="lang-switch">
+                        <a href="#" class="active">中文</a>
+                        <a href="#">English</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 图标按钮交互脚本 -->
+    <script>
+        // 搜索与联系由 shared-components.js 统一提供（弹出搜索框 / 联系弹窗）
+        // 语言切换
+        document.getElementById('langBtn').addEventListener('click', function () {
+            const lang = prompt('Switch language:\n1. 中文\n2. English', 'English');
+            if (lang === '中文' || lang === '1') {
+                // 后续可替换为中文页面地址
+                alert('Language switched to 中文');
+            } else if (lang === 'English' || lang === '2') {
+                alert('Language switched to English');
+            }
+        });
+    </script>
+<style>.so-overlay{display:none}.so-overlay.open{display:block}.so-bg{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:2000}
+.so-panel{position:fixed;top:80px;left:24px;right:24px;max-width:900px;z-index:2001;background:#fff;padding:18px;border-radius:8px;box-shadow:0 30px 80px rgba(0,0,0,.4)}
+.so-panel.open{display:block}
+.so-row{display:flex;align-items:center;gap:12px;border-bottom:1px solid #eee;padding-bottom:12px;margin-bottom:8px}
+.so-input{flex:1;border:1px solid #ddd;border-radius:6px;padding:10px 12px;font-size:15px;outline:none}
+.so-btn{background:none;border:1px solid #ddd;border-radius:6px;width:36px;height:36px;font-size:16px;cursor:pointer}
+.so-list{max-height:40vh;overflow:auto}
+.so-item{display:flex;gap:12px;align-items:center;padding:12px;border-bottom:1px solid #f3f3f3;cursor:pointer}
+.so-item:hover{background:#f7f7f7}
+.so-type{font-size:10px;text-transform:uppercase;color:#999;letter-spacing:.5px;white-space:nowrap}
+.so-main{flex:1;overflow:hidden}
+.so-sub{color:#999}
+.so-empty{font-size:14px;color:#888;padding:8px 0}
+.lb-overlay{display:none}.lb-overlay.open{display:block}.lb-bg{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:3000}
+.lb-figure{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:3001;transition:transform .15s}
+#lbImg{max-width:92%;max-height:86vh;object-fit:contain;border-radius:6px}
+.lb-cap{position:absolute;bottom:24px;left:0;right:0;text-align:center;color:#fff;font-size:14px}
+.lb-close,.lb-prev,.lb-next{position:fixed;top:20px;z-index:3002;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.3);width:44px;height:44px;border-radius:6px;font-size:20px;cursor:pointer}
+.lb-prev{left:20px}.lb-next{right:20px}.lb-close{right:20px}
+.cm-overlay{display:none}.cm-overlay.open{display:block}.cm-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:4000}
+.cm-panel{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:4001;background:#fff;width:92%;max-width:480px;padding:28px;border-radius:12px;box-shadow:0 40px 120px rgba(0,0,0,.5);max-height:92vh;overflow:auto}
+.cm-close{position:absolute;top:14px;right:18px;border:0;background:none;font-size:28px;cursor:pointer;color:#999}
+.cm-panel h2{font-size:22px;margin:0 0 18px}
+.cm-row,.cm-email{font-size:15px;line-height:1.7;margin:0 0 10px}
+.cm-email strong,.cm-row strong{display:block;color:#888;font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+.cm-copy-btn{margin-left:8px;font-size:11px;border:1px solid #ddd;padding:2px 8px;cursor:pointer;background:#fff;border-radius:4px}
+.cm-mailto{color:#111}
+.cm-form input,.cm-form textarea{display:block;width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;font-size:15px;margin-bottom:10px;outline:none}
+.cm-form textarea{resize:vertical}
+.cm-form button{width:100%;padding:12px;background:#111;color:#fff;border:0;border-radius:6px;cursor:pointer;font-size:14px}
+.cm-status{font-size:13px;color:#888;text-align:center;margin-top:12px}
+@media (max-width:600px){
+.so-panel{top:60px;left:12px;right:12px;max-height:80vh}
+.so-input{font-size:14px}
+}</style>
+<script src="site-data.js"></script>
+<script src="shared-components.js"></script>
+<!-- /end shared footer --></body>
+</html>

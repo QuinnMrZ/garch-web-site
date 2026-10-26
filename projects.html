@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects | GARCH</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #111;
+            background: #fff;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            width: 100%;
+            display: block;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 18px 40px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 999;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .logo {
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-mark {
+            width: 28px;
+            height: 28px;
+            background: #c8102e;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links a {
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            opacity: 0.6;
+        }
+
+        /* 右侧图标按钮 */
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-icon-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            border: none;
+            background: #f5f5f5;
+            color: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .nav-icon-btn:hover {
+            background: #111;
+            color: #fff;
+        }
+
+        /* 页面主体 */
+        .page-container {
+            padding: 120px 40px 60px;
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 40px;
+        }
+
+        .projects-grid {
+            display: block;
+        }
+
+        .album-section {
+            margin-bottom: 56px;
+        }
+
+        .album-head {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .album-head h2 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .album-en {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .album-count {
+            font-size: 12px;
+            color: #bbb;
+        }
+
+        .project-card {
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .project-card img {
+            width: 100%;
+            height: 360px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .project-card:hover img {
+            transform: scale(1.04);
+        }
+
+        .project-info {
+            padding: 16px 0;
+        }
+
+        .project-name {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .project-location {
+            font-size: 12px;
+            color: #888;
+        }
+
+        /* 页脚 */
+        footer {
+            border-top: 1px solid #f0f0f0;
+            padding: 60px 40px;
+        }
+
+        .footer-inner {
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 30px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-links a {
+            font-size: 14px;
+            color: #555;
+        }
+
+        /* 响应式 */
+        @media (max-width: 992px) {
+            .projects-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                padding: 16px 20px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .page-container {
+                padding: 100px 20px 40px;
+            }
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            footer {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <div class="logo-mark">GA</div>
+            Grown Architects + Partners
+        </a>
+        <ul class="nav-links">
+            <li><a href="projects.html" class="active">Projects</a></li>
+            <li><a href="generative-design.html">Generative Design</a></li>
+            <li><a href="office.html">Office</a></li>
+        </ul>
+        <div class="nav-icons">
+            <button class="nav-icon-btn" id="searchBtn" title="Search">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </button>
+            <button class="nav-icon-btn" id="contactBtn" title="Contact">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+            </button>
+            <button class="nav-icon-btn" id="langBtn" title="Language">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 作品列表 -->
+    <div class="page-container">
+        <h1 class="page-title">All Projects</h1>
+        <div class="projects-grid" id="projectsGallery"></div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-bottom">
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">© GARCH 2025</a>
+                </div>
+                <div class="social-links">
+                    <a href="#">Instagram</a>
+                    <a href="#">Facebook</a>
+                    <a href="#">Linkedin</a>
+                    <a href="#">X</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 图标按钮交互脚本 -->
+    <script>
+        // 搜索与联系由 shared-components.js 统一提供（弹出搜索框 / 联系弹窗）
+        // 语言切换
+        document.getElementById('langBtn').addEventListener('click', function () {
+            const lang = prompt('Switch language:\n1. 中文\n2. English', 'English');
+            if (lang === '中文' || lang === '1') {
+                alert('Language switched to 中文');
+            } else if (lang === 'English' || lang === '2') {
+                alert('Language switched to English');
+            }
+        });
+    </script>
+<style>.so-overlay{display:none}.so-overlay.open{display:block}.so-bg{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:2000}
+.so-panel{position:fixed;top:80px;left:24px;right:24px;max-width:900px;z-index:2001;background:#fff;padding:18px;border-radius:8px;box-shadow:0 30px 80px rgba(0,0,0,.4)}
+.so-panel.open{display:block}
+.so-row{display:flex;align-items:center;gap:12px;border-bottom:1px solid #eee;padding-bottom:12px;margin-bottom:8px}
+.so-input{flex:1;border:1px solid #ddd;border-radius:6px;padding:10px 12px;font-size:15px;outline:none}
+.so-btn{background:none;border:1px solid #ddd;border-radius:6px;width:36px;height:36px;font-size:16px;cursor:pointer}
+.so-list{max-height:40vh;overflow:auto}
+.so-item{display:flex;gap:12px;align-items:center;padding:12px;border-bottom:1px solid #f3f3f3;cursor:pointer}
+.so-item:hover{background:#f7f7f7}
+.so-type{font-size:10px;text-transform:uppercase;color:#999;letter-spacing:.5px;white-space:nowrap}
+.so-main{flex:1;overflow:hidden}
+.so-sub{color:#999}
+.so-empty{font-size:14px;color:#888;padding:8px 0}
+.lb-overlay{display:none}.lb-overlay.open{display:block}.lb-bg{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:3000}
+.lb-figure{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:3001;transition:transform .15s}
+#lbImg{max-width:92%;max-height:86vh;object-fit:contain;border-radius:6px}
+.lb-cap{position:absolute;bottom:24px;left:0;right:0;text-align:center;color:#fff;font-size:14px}
+.lb-close,.lb-prev,.lb-next{position:fixed;top:20px;z-index:3002;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.3);width:44px;height:44px;border-radius:6px;font-size:20px;cursor:pointer}
+.lb-prev{left:20px}.lb-next{right:20px}.lb-close{right:20px}
+.cm-overlay{display:none}.cm-overlay.open{display:block}.cm-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:4000}
+.cm-panel{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:4001;background:#fff;width:92%;max-width:480px;padding:28px;border-radius:12px;box-shadow:0 40px 120px rgba(0,0,0,.5);max-height:92vh;overflow:auto}
+.cm-close{position:absolute;top:14px;right:18px;border:0;background:none;font-size:28px;cursor:pointer;color:#999}
+.cm-panel h2{font-size:22px;margin:0 0 18px}
+.cm-row,.cm-email{font-size:15px;line-height:1.7;margin:0 0 10px}
+.cm-email strong,.cm-row strong{display:block;color:#888;font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+.cm-copy-btn{margin-left:8px;font-size:11px;border:1px solid #ddd;padding:2px 8px;cursor:pointer;background:#fff;border-radius:4px}
+.cm-mailto{color:#111}
+.cm-form input,.cm-form textarea{display:block;width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;font-size:15px;margin-bottom:10px;outline:none}
+.cm-form textarea{resize:vertical}
+.cm-form button{width:100%;padding:12px;background:#111;color:#fff;border:0;border-radius:6px;cursor:pointer;font-size:14px}
+.cm-status{font-size:13px;color:#888;text-align:center;margin-top:12px}
+@media (max-width:600px){
+.so-panel{top:60px;left:12px;right:12px;max-height:80vh}
+.so-input{font-size:14px}
+}</style>
+<script src="site-data.js"></script>
+<script src="shared-components.js"></script>
+<!-- /end shared footer --></body>
+</html>

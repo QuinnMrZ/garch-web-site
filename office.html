@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Office | GARCH</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #111;
+            background: #fff;
+            line-height: 1.7;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            width: 100%;
+            display: block;
+            border-radius: 8px;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 18px 40px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 999;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .logo {
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-mark {
+            width: 28px;
+            height: 28px;
+            background: #c8102e;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links a {
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            opacity: 0.6;
+        }
+
+        /* 右侧图标按钮 */
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-icon-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            border: none;
+            background: #f5f5f5;
+            color: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .nav-icon-btn:hover {
+            background: #111;
+            color: #fff;
+        }
+
+        /* 页面主体 */
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 120px 40px 60px;
+        }
+
+        .hero-slogan {
+            margin-bottom: 80px;
+        }
+
+        .hero-slogan h1 {
+            font-size: 48px;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 30px;
+        }
+
+        .intro-text {
+            font-size: 16px;
+            color: #555;
+            max-width: 500px;
+            margin-bottom: 30px;
+        }
+
+        .btn-outline {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 8px 18px;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .btn-outline:hover {
+            background: #111;
+            color: white;
+            border-color: #111;
+        }
+
+        /* 团队区块 */
+        .team-section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .team-desc {
+            font-size: 15px;
+            color: #555;
+            max-width: 600px;
+            margin-bottom: 40px;
+        }
+
+        .team-photo {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        /* 核心团队成员 */
+        .team-members {
+            margin-bottom: 80px;
+        }
+
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .member-card {
+            background: #fafafa;
+            border: 1px solid #f0f0f0;
+            border-radius: 12px;
+            padding: 24px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .member-card.wide {
+            grid-column: 1 / -1;
+        }
+
+        .member-photo {
+            width: 110px;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .member-en {
+            font-size: 12px;
+            color: #888;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .member-name {
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .member-title {
+            font-size: 13px;
+            color: #c8102e;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .member-list {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .member-bio {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .member-img-wide {
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 14px;
+        }
+
+        /* 理念区块 */
+        .philosophy-section {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 80px;
+            padding: 60px 0;
+            border-top: 1px solid #f0f0f0;
+            border-bottom: 1px solid #f0f0f0;
+            margin-bottom: 80px;
+        }
+
+        .philosophy-label {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #888;
+        }
+
+        .philosophy-content p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* 联系区块 */
+        .contact-section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        .contact-card h4 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            color: #888;
+        }
+
+        .contact-card p {
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .contact-card a {
+            text-decoration: underline;
+        }
+
+        /* 页脚 */
+        footer {
+            border-top: 1px solid #f0f0f0;
+            padding: 60px 40px;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 30px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-links a {
+            font-size: 14px;
+            color: #555;
+        }
+
+        /* 响应式 */
+        @media (max-width: 992px) {
+            .philosophy-section, .contact-section {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .members-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                padding: 16px 20px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .page-container {
+                padding: 100px 20px 40px;
+            }
+            .hero-slogan h1 {
+                font-size: 32px;
+            }
+            .section-title {
+                font-size: 24px;
+            }
+            footer {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <div class="logo-mark">GA</div>
+            Grown Architects + Partners
+        </a>
+        <ul class="nav-links">
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="generative-design.html">Generative Design</a></li>
+            <li><a href="office.html" class="active">Office</a></li>
+        </ul>
+        <div class="nav-icons">
+            <button class="nav-icon-btn" id="searchBtn" title="Search">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </button>
+            <button class="nav-icon-btn" id="contactBtn" title="Contact">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+            </button>
+            <button class="nav-icon-btn" id="langBtn" title="Language">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <!-- 顶部slogan -->
+        <section class="hero-slogan">
+            <h1>Aligned with Nature,<br>Advanced by Intelligence</h1>
+            <p class="intro-text">
+                GARCH is a multidisciplinary architecture and urban design practice, spanning cities, buildings, products, art and fashion, advancing creation through AI and Generative Design.
+            </p>
+            <a href="#contact" class="btn-outline">About Us →</a>
+        </section>
+
+        <!-- 团队介绍 -->
+        <section class="team-section">
+            <h2 class="section-title">GARCH Team</h2>
+            <p class="team-desc">
+                Based in Shanghai with a global reach, GARCH unites a diverse cohort of architects and designers from more than 30 regions worldwide, advancing design exploration with AI & Generative Design.
+            </p>
+            <div class="team-photo">
+                <img src="people/e12_708.png" alt="GARCH Core Team">
+            </div>
+        </section>
+
+        <!-- 核心团队成员 -->
+        <section class="team-members" id="team-members">
+            <h2 class="section-title">核心团队 · Core Team</h2>
+            <p class="team-desc">
+                来自建筑、商业地产、文旅运营与数字营销等领域的核心成员，共同推动亘荣（GARCH）的设计与实践。
+            </p>
+            <div class="members-grid">
+                <div class="member-card">
+                    <img class="member-photo" src="people-crops/zhangqing-portrait.png" alt="张卿 Quinn Zhang">
+                    <div>
+                        <div class="member-en">Quinn Zhang</div>
+                        <div class="member-name">张卿</div>
+                        <div class="member-title">上海亘荣 · 董事长 / 总规划师</div>
+                        <ul class="member-list">
+                            <li>上海同济大学建筑学学士 · 美国爱荷华州立大学建筑学硕士</li>
+                            <li>美国 AIA 注册建筑师 · 世界华人建筑师协会会员</li>
+                            <li>北京世纪千府设计院上海分院副院长</li>
+                            <li>曾任上海绿地集团房地产事业部产品部经理</li>
+                            <li>曾任砂之船艺术奥特莱斯开发设计总监</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="member-card">
+                    <img class="member-photo" src="people-crops/kevinwong-portrait.png" alt="凯文 Kevin Wong">
+                    <div>
+                        <div class="member-en">Kevin Wong</div>
+                        <div class="member-name">凯文</div>
+                        <div class="member-title">上海亘荣 · 董事 / 商业地产事业部总经理 / 策划总监</div>
+                        <ul class="member-list">
+                            <li>工程造价专业学士 · 2010年北京大学房地产研修 · 国家二级房地产策划师</li>
+                            <li>中国房地产策划师联谊会会员 · 中国韩城市美丽乡村建设高级顾问</li>
+                            <li>地产策划及文创跨界领域超过14年（2007–2021）</li>
+                            <li>曾供职于国际知名 GVA衡信柏迪、RET睿意德、JLL仲量联行，及英泰行、厦门鸿兆机构、前线地产等</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="member-card">
+                    <img class="member-photo" src="people-crops/yizhang-portrait.png" alt="张毅 Yi Zhang">
+                    <div>
+                        <div class="member-en">Yi Zhang</div>
+                        <div class="member-name">张毅</div>
+                        <div class="member-title">上海亘荣 · 招商部总经理</div>
+                        <ul class="member-list">
+                            <li>陕西沃天商业地产管理公司 执行董事/总经理</li>
+                            <li>陕西博嘉堂商业地产管理有限公司 监事/总经理</li>
+                            <li>西安交大管理学院工商管理硕士 · 大雁塔景区商业顾问 · 大唐通易坊商业总经理</li>
+                            <li>代表项目：小寨领秀城 / 小寨潮流街区 / 大唐通易坊 / 小寨安南城 / 中石油长庆坊 / 竹笆市商业改造 / smart商业汇</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="member-card">
+                    <img class="member-photo" src="people-crops/liahua-portrait.png" alt="廖华 Liao Hua">
+                    <div>
+                        <div class="member-en">Liao Hua</div>
+                        <div class="member-name">廖华</div>
+                        <div class="member-title">上海亘荣 · 活动策划师 / 线上OTA运营总监</div>
+                        <ul class="member-list">
+                            <li>淘宝天猫店铺运营导师 · 美团民宿OTA运营导师 · 携程民宿OTA运营导师</li>
+                            <li>抖音店运营导师 · 微视频账号运营总监 · 网红设计师主播</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="member-card wide" id="koetting">
+                    <img class="member-photo" src="people-crops/koetting-portrait.png" alt="威廉姆.W.柯廷 William Wayne Koetting">
+                    <div>
+                        <div class="member-en">William Wayne Koetting</div>
+                        <div class="member-name">威廉姆.W.柯廷</div>
+                        <div class="member-title">上海亘荣 · 特别顾问 · 亘荣（国际）咨询设计事务所 创始人/高级顾问</div>
+                        <p class="member-bio">
+                            威廉姆.W.柯廷是一位60多岁的著名建筑师，我们亲切地叫他"比尔"。他曾是美国注册建筑师协会上海分会的创立者之一，毕业于美国西南大学（位于洛杉矶），并成为美国AIA注册建筑师。他是主题乐园设计的专家，2023年前是上海迪士尼乐园的总建筑师，也是我们亘荣（国际）咨询设计事务所创始人和高级顾问之一。
+                        </p>
+                        <ul class="member-list">
+                            <li>Southwestern University · Member of AIA L.A.</li>
+                            <li>Chief Architect of Shanghai Disneyland</li>
+                            <li>Grown Architects Senior Consultant</li>
+                        </ul>
+                        <img class="member-img-wide" src="people/ScreenShot_2026-10-25_120921_443.png" alt="人物志 · 威廉姆.W.柯廷">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 设计理念 -->
+        <section class="philosophy-section" id="philosophy">
+            <div class="philosophy-label">Our Philosophy</div>
+            <div class="philosophy-content">
+                <p>
+                    We trace humanity's social evolution alongside cities and architecture, rebalancing the relationship between people and nature, while harnessing cutting-edge AI and proven AIGC practices. Evolution never ceases.
+                </p>
+                <p>
+                    We view generative AI as a medium of exploration, not an answer generator. It multiplies the trajectories of spatial imagination, helping us test alternative realities of built environments. Every output is curated, reviewed and grounded by our architects.
+                </p>
+                <p>
+                    Rooted in Nature, Powered by Intelligence — this is the core belief that drives every project we undertake.
+                </p>
+            </div>
+        </section>
+
+        <!-- 联系方式 -->
+        <section class="contact-section" id="contact">
+            <div class="contact-card">
+                <h4>Studio</h4>
+                <p>中国上海市崇明区三星镇北星公路1999号<br>No. 1999, Beixing Rd, Sanxing Town,<br>Chongming District, Shanghai, China</p>
+            </div>
+            <div class="contact-card">
+                <h4>Contact</h4>
+                <p>
+                    Email: <a href="mailto:qingzhang55155@gmail.com">qingzhang55155@gmail.com</a><br>
+                    Tel: <a href="tel:+8618801860726">+86 18801860726</a>
+                </p>
+            </div>
+            <div class="contact-card">
+                <h4>Follow Us</h4>
+                <p>
+                    Instagram / Facebook<br>
+                    LinkedIn / X (Twitter)<br>
+                    WeChat Official Account
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-bottom">
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">© GARCH 2025</a>
+                </div>
+                <div class="social-links">
+                    <a href="#">Instagram</a>
+                    <a href="#">Facebook</a>
+                    <a href="#">Linkedin</a>
+                    <a href="#">X</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 图标按钮交互脚本 -->
+    <script>
+        // 搜索与联系由 shared-components.js 统一提供（弹出搜索框 / 联系弹窗）
+        // 语言切换
+        document.getElementById('langBtn').addEventListener('click', function () {
+            const lang = prompt('Switch language:\n1. 中文\n2. English', 'English');
+            if (lang === '中文' || lang === '1') {
+                alert('Language switched to 中文');
+            } else if (lang === 'English' || lang === '2') {
+                alert('Language switched to English');
+            }
+        });
+    </script>
+<style>.so-overlay{display:none}.so-overlay.open{display:block}.so-bg{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:2000}
+.so-panel{position:fixed;top:80px;left:24px;right:24px;max-width:900px;z-index:2001;background:#fff;padding:18px;border-radius:8px;box-shadow:0 30px 80px rgba(0,0,0,.4)}
+.so-panel.open{display:block}
+.so-row{display:flex;align-items:center;gap:12px;border-bottom:1px solid #eee;padding-bottom:12px;margin-bottom:8px}
+.so-input{flex:1;border:1px solid #ddd;border-radius:6px;padding:10px 12px;font-size:15px;outline:none}
+.so-btn{background:none;border:1px solid #ddd;border-radius:6px;width:36px;height:36px;font-size:16px;cursor:pointer}
+.so-list{max-height:40vh;overflow:auto}
+.so-item{display:flex;gap:12px;align-items:center;padding:12px;border-bottom:1px solid #f3f3f3;cursor:pointer}
+.so-item:hover{background:#f7f7f7}
+.so-type{font-size:10px;text-transform:uppercase;color:#999;letter-spacing:.5px;white-space:nowrap}
+.so-main{flex:1;overflow:hidden}
+.so-sub{color:#999}
+.so-empty{font-size:14px;color:#888;padding:8px 0}
+.lb-overlay{display:none}.lb-overlay.open{display:block}.lb-bg{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:3000}
+.lb-figure{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:3001;transition:transform .15s}
+#lbImg{max-width:92%;max-height:86vh;object-fit:contain;border-radius:6px}
+.lb-cap{position:absolute;bottom:24px;left:0;right:0;text-align:center;color:#fff;font-size:14px}
+.lb-close,.lb-prev,.lb-next{position:fixed;top:20px;z-index:3002;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.3);width:44px;height:44px;border-radius:6px;font-size:20px;cursor:pointer}
+.lb-prev{left:20px}.lb-next{right:20px}.lb-close{right:20px}
+.cm-overlay{display:none}.cm-overlay.open{display:block}.cm-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:4000}
+.cm-panel{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:4001;background:#fff;width:92%;max-width:480px;padding:28px;border-radius:12px;box-shadow:0 40px 120px rgba(0,0,0,.5);max-height:92vh;overflow:auto}
+.cm-close{position:absolute;top:14px;right:18px;border:0;background:none;font-size:28px;cursor:pointer;color:#999}
+.cm-panel h2{font-size:22px;margin:0 0 18px}
+.cm-row,.cm-email{font-size:15px;line-height:1.7;margin:0 0 10px}
+.cm-email strong,.cm-row strong{display:block;color:#888;font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+.cm-copy-btn{margin-left:8px;font-size:11px;border:1px solid #ddd;padding:2px 8px;cursor:pointer;background:#fff;border-radius:4px}
+.cm-mailto{color:#111}
+.cm-form input,.cm-form textarea{display:block;width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;font-size:15px;margin-bottom:10px;outline:none}
+.cm-form textarea{resize:vertical}
+.cm-form button{width:100%;padding:12px;background:#111;color:#fff;border:0;border-radius:6px;cursor:pointer;font-size:14px}
+.cm-status{font-size:13px;color:#888;text-align:center;margin-top:12px}
+@media (max-width:600px){
+.so-panel{top:60px;left:12px;right:12px;max-height:80vh}
+.so-input{font-size:14px}
+}</style>
+<script src="site-data.js"></script>
+<script src="shared-components.js"></script>
+<!-- /end shared footer --></body>
+</html>
