@@ -28,3 +28,43 @@
 
 - 正式域名：https://gro-architect.com （Cloudflare DNS → GitHub Pages）
 - GitHub Pages：https://quinnmrz.github.io/garch-web-site/
+
+## 📖 日常维护指南（速查）
+
+### ① 增删 / 更换项目图片（最常用）
+
+1. 把图片放进对应相册文件夹（`images/` 下）：
+   | 文件夹 | 相册 |
+   | --- | --- |
+   | `images/hotels` | 星级酒店 |
+   | `images/commercial` | 高端商业 |
+   | `images/residential` | 精品住宅 |
+   | `images/urbanism` | 城市设计 |
+   | `images/biddings` | 投标方案 |
+   | `AIGC/` | 生成式设计页 |
+   | `people/`、`people-crops/` | 团队照片 |
+2. 在本目录运行：`node gen-site-data.js`（重新生成相册数据）
+3. 提交推送：`git add -A && git commit -m "更新图片" && git push`
+4. 1~2 分钟后 https://gro-architect.com 自动更新
+
+### ② 新增一个相册
+
+1. 在 `images/` 下新建文件夹（如 `landscapes`），放入图片
+2. 打开 `gen-site-data.js`，在 `LABELS = {...}` 里加一行：`landscapes: '园林景观',`
+3. `node gen-site-data.js` → 提交推送
+
+### ③ 修改文字 / 团队介绍 / 联系方式
+
+直接编辑对应的 `.html` 文件（推荐用记事本或 VS Code），保存后提交推送即可。
+
+### ④ 图片建议
+
+- 格式：**webp** 优先（更小更快），png/jpg 也可
+- 尺寸：长边 1600~2000 像素足够网页用，单张尽量控制在 500KB 内（可用 ACDSee 批量压缩）
+- 命名：`图片 N.webp` 保持数字排序即可按顺序展示
+
+### ⚠️ 注意
+
+- `site-data.js` 是自动生成的，**不要手改**，改图片后重新生成就行
+- 根目录的 `CNAME` 文件**不要删除**（它把域名绑定在 gro-architect.com）
+- 改完可先双击 `index.html` 本地预览，再推送
